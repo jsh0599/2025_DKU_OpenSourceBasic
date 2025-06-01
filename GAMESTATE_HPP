@@ -3,8 +3,8 @@
 
 #include "state.hpp"
 #include "inputmanager.hpp"
-#include "game_logic.hpp"
-#include "game_renderer.hpp"
+#include "GameLogic.hpp"
+#include "GameRenderer.hpp"
 
 class GameState : public State {
 public:
