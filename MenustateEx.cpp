@@ -78,19 +78,7 @@ void MenuState::draw()
     }
 
     // 현재 선택된 버튼 하이라이트
-    if (index < mButtons.size())
-    {
-        SDL_Rect highlight_box = {
-            mButtons[index]->getX(),
-            mButtons[index]->getY(),
-            mButtons[index]->getWidth(),
-            mButtons[index]->getHeight()};
-
-        SDL_SetRenderDrawBlendMode(Game::getInstance()->mRenderer->mSDLRenderer, SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(Game::getInstance()->mRenderer->mSDLRenderer, 255, 255, 255, config::transparency_alpha - 20);
-        SDL_RenderFillRect(Game::getInstance()->mRenderer->mSDLRenderer, &highlight_box);
-        SDL_SetRenderDrawBlendMode(Game::getInstance()->mRenderer->mSDLRenderer, SDL_BLENDMODE_NONE);
-    }
+    SelectionInputHandler::renderHighlight(mButtons, index)
 
     Game::getInstance()->mRenderer->updateScreen();
 }
