@@ -78,7 +78,7 @@ void MenuState::draw()
     }
 
     // 현재 선택된 버튼 하이라이트
-    SelectionInputHandler::renderHighlight(mButtons, index)
+    SelectionInputHandler::renderHighlight(mButtons, index);
 
     Game::getInstance()->mRenderer->updateScreen();
 }
