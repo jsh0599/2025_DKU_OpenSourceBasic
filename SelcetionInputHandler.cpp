@@ -29,3 +29,19 @@ void SelectionInputHandler::handle(InputManager* input, std::vector<Button*>& bu
         }
     }
 }
+
+void SelectionInputHandler::renderHighlight(std::vector<Button*>& buttons, size_t index) {
+    if (index >= buttons.size()) return;
+
+    SDL_Rect highlight_box = {
+        buttons[index]->getX(),
+        buttons[index]->getY(),
+        buttons[index]->getWidth(),
+        buttons[index]->getHeight()
+    };
+
+    SDL_SetRenderDrawBlendMode(Game::getInstance()->mRenderer->mSDLRenderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(Game::getInstance()->mRenderer->mSDLRenderer, 255, 255, 255, config::transparency_alpha - 20);
+    SDL_RenderFillRect(Game::getInstance()->mRenderer->mSDLRenderer, &highlight_box);
+    SDL_SetRenderDrawBlendMode(Game::getInstance()->mRenderer->mSDLRenderer, SDL_BLENDMODE_NONE);
+}
