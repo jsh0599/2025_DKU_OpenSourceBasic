@@ -32,6 +32,7 @@ public:
 private:
     void createNewPiece();
     void checkState();
+    void movePieceDown();
 
     Board* board;
     Piece currentPiece {0, 0};
@@ -49,3 +50,4 @@ private:
 };
 
 #endif // GAMELOGIC_HPP
+
