@@ -3,8 +3,14 @@
 #include "button.hpp"
 #include "game.hpp"
 
-void SelectionInputHandler::handle(InputManager* input, std::vector<Button*>& buttons, size_t& index) {
+void SelectionInputHandler::handle(InputManager* input, std::vector<Button*>& buttons, size_t& index,StateID& nextStateID) {
+    
     while (input->pollAction()) {
+        if (mInputManager->isGameExiting())
+        {
+            nextStateID = STATE_EXIT;
+            break;
+        }
         switch (input->getAction()) {
             case Action::move_up:
                 if (index > 0) --index;
