@@ -1,7 +1,7 @@
 #include "menustate.hpp"
 #include "game.hpp"
 #include "config.hpp"
-#include "MenuInputHelper.hpp"
+#include "SelectionInputHandler.hpp"
 
 MenuState::MenuState(InputManager *manager)
     : State(manager)
