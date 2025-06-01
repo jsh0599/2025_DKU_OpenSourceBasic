@@ -127,7 +127,7 @@ void OptionsState::draw() {
 
     for (auto btn : mButtons) btn->draw();
 
-    SelectionInputHandler::renderHighlight(mButtons, index)
+    SelectionInputHandler::renderHighlight(mButtons, index);
 
     Game::getInstance()->mRenderer->updateScreen();
 }
