@@ -3,7 +3,7 @@
 #include "button.hpp"
 #include "game.hpp"
 
-void SelcetionInputHandler::handle(InputManager* input, std::vector<Button*>& buttons, size_t& index) {
+void SelectionInputHandler::handle(InputManager* input, std::vector<Button*>& buttons, size_t& index) {
     while (input->pollAction()) {
         switch (input->getAction()) {
             case Action::move_up:
