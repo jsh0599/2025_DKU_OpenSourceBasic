@@ -9,7 +9,7 @@ class Button;
 class SelectionInputHandler {
 public:
     static void handle(class InputManager* input, std::vector<class Button*>& buttons, size_t& index);
-    static void SelectionInputHandler::renderHighlight(std::vector<Button*>& buttons, size_t index)
+    static void renderHighlight(std::vector<Button*>& buttons, size_t index)
 };
 
 #endif // SELECTIONINPUTHANDLER_HPP
