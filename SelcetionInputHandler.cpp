@@ -6,7 +6,7 @@
 void SelectionInputHandler::handle(InputManager* input, std::vector<Button*>& buttons, size_t& index,StateID& nextStateID) {
     
     while (input->pollAction()) {
-        if (mInputManager->isGameExiting())
+        if (input->isGameExiting())
         {
             nextStateID = STATE_EXIT;
             break;
