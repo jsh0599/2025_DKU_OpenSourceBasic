@@ -60,7 +60,7 @@ void MenuState::run()
 
 void MenuState::update()
 {
-    MenuInputHelper::handle(mInputManager, mButtons, index);
+    MenuInputHelper::handle(mInputManager, mButtons, index, nextStateID);
 }
 
 void MenuState::draw()
