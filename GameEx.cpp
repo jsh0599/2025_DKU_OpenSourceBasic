@@ -72,13 +72,18 @@ void Game::exit()
     TTF_Quit();
 }
 
-void Game::run()
-{
-    if (!mStates.empty())
-    {
+void Game::run() {
+    // 이전 프레임에서 pop된 상태 안전하게 삭제
+    if (mPendingDeleteState) {
+        delete mPendingDeleteState;
+        mPendingDeleteState = nullptr;
+    }
+
+    if (!mStates.empty()) {
         mStates.back()->run();
     }
 }
+
 
 void Game::popState() {
     if (!mStates.empty()) {
