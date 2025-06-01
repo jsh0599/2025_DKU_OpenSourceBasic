@@ -2,17 +2,16 @@
 #define GAME_HPP
 
 #include <vector>
-
 #include <SDL.h>
 #include <SDL_ttf.h>
-
 #include "inputmanager.hpp"
 #include "renderer.hpp"
 #include "state.hpp"
+#include "state_factory.hpp"
 
+// 상태 클래스 전방 선언
 class SpeedChallengeState;
 class ChallengeMenuState;
-class State;
 class GameState;
 class MenuState;
 class OptionsState;
@@ -21,55 +20,50 @@ class LobbyState;
 class ModeSelectState;
 class MultiState;
 
-class Game
-{
+class Game {
 public:
-    friend class OptionsState;
     static Game* getInstance();
 
     bool initialize();
     void exit();
     void run();
-    
+
     void popState();
+    void pushState(State* s);
+    void changeState(State* s);
+
     template <typename T>
-    void pushNewState();
-    void pushState(State *s);
-    void changeState(State *s);
-
-    static void pushChallengeMenu();
-    static void pushOptions();
-    static void pushNewGame();
-    static void pushPaused();
-    static void pushLobby();
-    static void pushModeSelect();
-    static void pushSpeedChallenge();
-    static void pushMulti();
-
-    static void goBack();
-    static void goDoubleBack();
+    void pushNewState() {
+        State* state = StateFactory::create<T>(mManager);
+        pushState(state);
+    }
 
     bool isGameExiting();
 
-    Renderer *mRenderer;
-    SDL_Window *mWindow;
+    Renderer* mRenderer;
+    SDL_Window* mWindow;
+
+    InputManager* getInputManager() const { return mManager; }
 
 private:
-    static Game *mInstance;
+    static Game* mInstance;
     Game();
-    InputManager *mManager;
+
+    InputManager* mManager;
     std::vector<State*> mStates;
 
     State* mPendingDeleteState = nullptr;
-    ChallengeMenuState *mChallengeMenuState;
-    SpeedChallengeState *mSpeedChallengeState;
-    GameState *mPlayState;
-    MenuState *mMainMenuState;
-    OptionsState *mOptionsState;
-    PausedState *mPausedState;
-    LobbyState *mLobbyState;
-    ModeSelectState *mModeSelectState;
-    MultiState *mMultiState;
+
+    // 선택적 저장 포인터들 (삭제 예정이거나 추후 공유 가능)
+    ChallengeMenuState* mChallengeMenuState = nullptr;
+    SpeedChallengeState* mSpeedChallengeState = nullptr;
+    GameState* mPlayState = nullptr;
+    MenuState* mMainMenuState = nullptr;
+    OptionsState* mOptionsState = nullptr;
+    PausedState* mPausedState = nullptr;
+    LobbyState* mLobbyState = nullptr;
+    ModeSelectState* mModeSelectState = nullptr;
+    MultiState* mMultiState = nullptr;
 };
 
 #endif // GAME_HPP
