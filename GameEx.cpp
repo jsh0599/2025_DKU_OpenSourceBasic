@@ -80,11 +80,10 @@ void Game::run()
     }
 }
 
-void Game::popState()
-{
-    if (!mStates.empty())
-    {
-        delete mStates.back();
+void Game::popState() {
+    if (!mStates.empty()) {
+        // 삭제 예약만 하고 당장 delete 하지 않음
+        mPendingDeleteState = mStates.back();
         mStates.pop_back();
     }
 }
