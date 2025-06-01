@@ -1,0 +1,47 @@
+#ifndef GAMESTATE_HPP
+#define GAMESTATE_HPP
+
+#include "state.hpp"
+#include "inputmanager.hpp"
+#include "game_logic.hpp"
+#include "game_renderer.hpp"
+
+class GameState : public State {
+public:
+    GameState(InputManager* manager);
+    ~GameState();
+
+    void initialize() override;
+    void exit() override;
+    void run() override;
+    void update() override;
+    void draw() override;
+
+    StateID nextStateID = STATE_NULL;
+
+protected:
+    enum GamePhase { GAME_STARTED, GAME_PLAYING, GAME_FINISHED };
+    GamePhase currentPhase;
+
+    Board* board;
+    Piece currentPiece {0, 0};
+    Piece nextPiece {0, 0};
+    Piece holdPiece {0, 0};
+    Piece ghostPiece {0, 0};
+
+    bool hold_block_first_time;
+    bool hold_block_used;
+    bool game_just_started;
+
+    unsigned long long time_snap1;
+    unsigned long long time_snap2;
+
+    bool isExited = false;
+
+    GameLogic* logic;
+    GameRenderer* renderer;
+
+    void cleanup();
+};
+
+#endif // GAMESTATE_HPP
