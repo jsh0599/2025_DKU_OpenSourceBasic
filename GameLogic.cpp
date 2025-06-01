@@ -1,115 +1,37 @@
 // GameLogic.cpp
 #include "GameLogic.hpp"
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
+#include "game.hpp"
 #include <iostream>
 
-GameLogic::GameLogic(Board* board)
-    : board(board), holdFirstTime(true), holdUsed(false), ghostEnabled(true),
-      score(0), stage(1), linesCleared(0), dropInterval(0.8f) {
-    srand(static_cast<unsigned int>(time(nullptr)));
-    nextPiece.piece_type = rand() % 7;
-    nextPiece.rotation = 0;
-    createNewPiece();
-}
+GameLogic::GameLogic(Board* board) : board(board), linesCleared(0), stage(1), score(0), dropInterval(0.8f), dropTimer(0.0f) {}
 
-void GameLogic::reset() {
-    score = 0;
-    stage = 1;
-    linesCleared = 0;
-    dropInterval = 0.8f;
-    holdFirstTime = true;
-    holdUsed = false;
-    nextPiece.piece_type = rand() % 7;
-    nextPiece.rotation = 0;
-    createNewPiece();
-}
+void GameLogic::createNewPiece(Piece& current, Piece& next) {
+    current.piece_type = next.piece_type;
+    current.rotation = next.rotation;
+    current.r = current.getInitialOffsetR();
+    current.c = config::playfield_width / 2 + current.getInitialOffsetC();
 
-void GameLogic::handleAction(Action action) {
-    switch (action) {
-        case Action::move_down:
-            currentPiece.r++;
-            if (!board->isPositionLegal(currentPiece)) {
-                currentPiece.r--;
-                checkState();
-            }
-            break;
-        case Action::move_left:
-            currentPiece.c--;
-            if (!board->isPositionLegal(currentPiece)) currentPiece.c++;
-            break;
-        case Action::move_right:
-            currentPiece.c++;
-            if (!board->isPositionLegal(currentPiece)) currentPiece.c--;
-            break;
-        case Action::drop:
-            while (board->isPositionLegal(currentPiece)) currentPiece.r++;
-            currentPiece.r--;
-            checkState();
-            break;
-        case Action::rotate:
-            currentPiece.rotation = (currentPiece.rotation + 1) % 4;
-            if (!board->isPositionLegal(currentPiece))
-                currentPiece.rotation = (currentPiece.rotation + 3) % 4;
-            break;
-        case Action::hold:
-            if (holdFirstTime) {
-                holdPiece = Piece(currentPiece);
-                holdPiece.rotation = 0;
-                createNewPiece();
-                holdFirstTime = false;
-                holdUsed = true;
-            } else if (!holdUsed) {
-                std::swap(currentPiece, holdPiece);
-                holdPiece.rotation = 0;
-                currentPiece.r = currentPiece.getInitialOffsetR();
-                currentPiece.c = config::playfield_width / 2 + currentPiece.getInitialOffsetC();
-                holdUsed = true;
-            }
-            break;
-        default:
-            break;
+    for (int i = 0; i < 2; i++) {
+        current.r++;
+        if (!board->isPositionLegal(current)) {
+            current.r--;
+        }
     }
-}
-
-void GameLogic::updateDropTimer(float delta) {
-    // 구현 생략: 타이머 기반 자동 드롭
-}
-
-void GameLogic::step() {
-    currentPiece.r++;
-    if (!board->isPositionLegal(currentPiece)) {
-        currentPiece.r--;
-        checkState();
+    if (current.piece_type > 1) {
+        current.r++;
+        if (!board->isPositionLegal(current)) {
+            current.r--;
+        }
     }
+
+    next.piece_type = getRandom(0, 6);
+    next.rotation = 0;
+    next.r = config::next_box_y;
+    next.c = config::next_box_x;
 }
 
-bool GameLogic::isGameOver() const {
-    return board->isGameOver();
-}
-
-const Piece& GameLogic::getCurrentPiece() const { return currentPiece; }
-const Piece& GameLogic::getNextPiece() const { return nextPiece; }
-const Piece& GameLogic::getHoldPiece() const { return holdPiece; }
-bool GameLogic::isHoldUsed() const { return holdUsed; }
-bool GameLogic::isFirstHold() const { return holdFirstTime; }
-int GameLogic::getScore() const { return score; }
-int GameLogic::getStage() const { return stage; }
-float GameLogic::getDropInterval() const { return dropInterval; }
-void GameLogic::setGhostEnabled(bool enabled) { ghostEnabled = enabled; }
-
-void GameLogic::createNewPiece() {
-    currentPiece.piece_type = nextPiece.piece_type;
-    currentPiece.rotation = nextPiece.rotation;
-    currentPiece.r = currentPiece.getInitialOffsetR();
-    currentPiece.c = config::playfield_width / 2 + currentPiece.getInitialOffsetC();
-    nextPiece.piece_type = rand() % 7;
-    nextPiece.rotation = 0;
-}
-
-void GameLogic::checkState() {
-    board->storePiece(currentPiece);
+void GameLogic::checkState(Piece& current, Piece& next, Piece& hold, bool& holdUsed, bool& gameStarted) {
+    board->storePiece(current);
     int cleared = board->clearFullLines();
     if (cleared > 0) {
         int points = 0;
@@ -117,8 +39,10 @@ void GameLogic::checkState() {
         else if (cleared == 2) points = 300;
         else if (cleared == 3) points = 500;
         else if (cleared >= 4) points = 800;
+
         score += points;
     }
+
     linesCleared += cleared;
     while (linesCleared >= 1) {
         stage++;
@@ -126,8 +50,98 @@ void GameLogic::checkState() {
         dropInterval = std::max(0.1f, dropInterval - 0.1f);
         std::cout << "Stage Up! Now at Stage " << stage << ", drop interval = " << dropInterval << "s\n";
     }
+
     if (!board->isGameOver()) {
-        createNewPiece();
+        createNewPiece(current, next);
     }
     holdUsed = false;
 }
+
+void GameLogic::movePieceDown(Piece& current, Piece& next, Piece& hold, bool& holdUsed, bool& gameStarted) {
+    current.r++;
+    if (!board->isPositionLegal(current)) {
+        current.r--;
+        checkState(current, next, hold, holdUsed, gameStarted);
+    }
+}
+
+void GameLogic::handleEvent(Action action, Piece& current, Piece& next, Piece& hold, bool& holdFirst, bool& holdUsed, bool& gameStarted) {
+    switch(action) {
+        case Action::move_down:
+            current.r++;
+            if (!board->isPositionLegal(current)) {
+                current.r--;
+                checkState(current, next, hold, holdUsed, gameStarted);
+            }
+            break;
+        case Action::move_left:
+            current.c--;
+            if (!board->isPositionLegal(current)) current.c++;
+            break;
+        case Action::move_right:
+            current.c++;
+            if (!board->isPositionLegal(current)) current.c--;
+            break;
+        case Action::drop:
+            while (board->isPositionLegal(current)) current.r++;
+            current.r--;
+            checkState(current, next, hold, holdUsed, gameStarted);
+            break;
+        case Action::move_up:
+        case Action::rotate:
+            current.rotation = (current.rotation + 1) % 4;
+            if (!board->isPositionLegal(current)) current.rotation = (current.rotation + 3) % 4;
+            break;
+        case Action::hold:
+            if (holdFirst) {
+                hold = Piece(current);
+                hold.rotation = 0;
+                createNewPiece(current, next);
+                holdFirst = false;
+                holdUsed = true;
+            } else if (!holdUsed) {
+                std::swap(current, hold);
+                hold.rotation = 0;
+                current.r = current.getInitialOffsetR();
+                current.c = config::playfield_width / 2 + current.getInitialOffsetC();
+
+                for (int i = 0; i < 2; i++) {
+                    current.r++;
+                    if (!board->isPositionLegal(current)) current.r--;
+                }
+                if (current.piece_type > 1) {
+                    current.r++;
+                    if (!board->isPositionLegal(current)) current.r--;
+                }
+                holdUsed = true;
+            }
+            break;
+        case Action::pause:
+            gameStarted = true;
+            Game::getInstance()->pushPaused();
+            break;
+        default:
+            break;
+    }
+}
+
+bool GameLogic::isGameOver() const {
+    return board->isGameOver();
+}
+
+int GameLogic::getScore() const {
+    return score;
+}
+
+int GameLogic::getStage() const {
+    return stage;
+}
+
+float GameLogic::getDropInterval() const {
+    return dropInterval;
+}
+
+int GameLogic::getRandom(int lower_limit, int upper_limit) {
+    return rand() % (upper_limit - lower_limit + 1) + lower_limit;
+}
+
