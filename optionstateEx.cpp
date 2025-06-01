@@ -82,7 +82,7 @@ void OptionsState::run() {
 }
 
 void OptionsState::update() {
-    SelectionInputHandler::handle(mInputManager, mButtons, index);
+    SelectionInputHandler::handle(mInputManager, mButtons, index, nextStateID);
 
     while (mInputManager->pollAction()) {
         switch (mInputManager->getAction()) {
