@@ -60,6 +60,7 @@ private:
     InputManager *mManager;
     std::vector<State*> mStates;
 
+    State* mPendingDeleteState = nullptr;
     ChallengeMenuState *mChallengeMenuState;
     SpeedChallengeState *mSpeedChallengeState;
     GameState *mPlayState;
