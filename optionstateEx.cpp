@@ -82,11 +82,6 @@ void OptionsState::run() {
 }
 
 void OptionsState::update() {
-    if (mInputManager->isGameExiting()) {
-        nextStateID = STATE_EXIT;
-        return;
-    }
-
     SelectionInputHandler::handle(mInputManager, mButtons, index);
 
     while (mInputManager->pollAction()) {
