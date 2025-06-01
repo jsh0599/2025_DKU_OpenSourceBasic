@@ -59,18 +59,7 @@ bool Game::initialize()
     return true;
 }
 
-void Game::exit()
-{
-    delete mRenderer;
-    delete mManager;
 
-    for (State *s : mStates)
-        delete s;
-
-    SDL_DestroyWindow(mWindow);
-    SDL_Quit();
-    TTF_Quit();
-}
 
 void Game::run() {
     // 이전 프레임에서 pop된 상태 안전하게 삭제
@@ -82,6 +71,27 @@ void Game::run() {
     if (!mStates.empty()) {
         mStates.back()->run();
     }
+}
+
+void Game::exit() {
+    for (State* s : mStates) {
+        delete s;
+    }
+    mStates.clear();
+
+    // 만약 삭제 예약된 게 남아있다면
+    if (mPendingDeleteState) {
+        delete mPendingDeleteState;
+        mPendingDeleteState = nullptr;
+    }
+
+    // Renderer, InputManager, SDL 자원도 해제
+    delete mRenderer;
+    delete mManager;
+
+    SDL_DestroyWindow(mWindow);
+    SDL_Quit();
+    TTF_Quit();
 }
 
 
