@@ -27,7 +27,7 @@ void MainMenuState::initialize() {
 
     addButton(new Button(
     "OPTIONS",
-    []() { Game::getInstance()->pushNewState<OptionsState>(); },
+    []() { Game::getInstance()->pushNewState<MainMenuOptionsState>(); },
     centerX, 190, buttonWidth, buttonHeight
     ));
 
