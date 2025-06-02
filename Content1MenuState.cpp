@@ -9,6 +9,8 @@ Content1MenuState::Content1MenuState(InputManager* manager)
 
 void Content1MenuState::initialize() {
     // 제목 텍스트
+    // 컨텐츠로직 초기화 //
+    
     title_text = new Texture();
     title_text->loadFromText("Content 1 Menu", Game::getInstance()->mRenderer->bigFont, config::default_text_color);
 
