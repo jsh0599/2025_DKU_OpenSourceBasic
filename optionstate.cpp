@@ -1,41 +1,36 @@
-#include "optionsstate.hpp"
+#include "abstractoptionstate.hpp"
 #include "selectioninputhandler.hpp"
 #include "game.hpp"
 
-OptionsState::OptionsState(InputManager* manager)
-    : State(manager), title_text(nullptr), index(0) {}
+AbstractOptionState::AbstractOptionState(InputManager* inputManager)
+    : State(inputManager), index(0) {}
 
-OptionsState::~OptionsState() {
+AbstractOptionState::~AbstractOptionState() {
     exit();
 }
 
-void OptionsState::run() {
+void AbstractOptionState::exit() {
+    for (auto btn : mButtons) delete btn;
+    mButtons.clear();
+}
+
+void AbstractOptionState::run() {
     update();
     draw();
 }
 
-void OptionsState::update() {
+void AbstractOptionState::update() {
     SelectionInputHandler::handle(mInputManager, mButtons, index, nextStateID);
-
-    while (mInputManager->pollAction()) {
-        switch (mInputManager->getAction()) {
-            case Action::move_left:
-                changeSetting(index, -1);
-                break;
-            case Action::move_right:
-                changeSetting(index, +1);
-                break;
-            default:
-                break;
-        }
-    }
 }
 
-void OptionsState::exit() {
-    for (auto btn : mButtons) delete btn;
-    mButtons.clear();
-    if (title_text) {
-        delete title_text;
-        title_text = nullptr;
-    }
+void AbstractOptionState::draw() {
+    Game::getInstance()->mRenderer->clearScreen();
+
+    for (auto btn : mButtons) btn->draw();
+    SelectionInputHandler::renderHighlight(mButtons, index);
+
+    drawOptions(); // 개별 설정 그리기
+
+    Game::getInstance()->mRenderer->updateScreen();
 }
+
