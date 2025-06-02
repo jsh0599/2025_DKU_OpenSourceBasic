@@ -10,7 +10,7 @@ Content1MenuState::Content2MenuState(InputManager* manager)
 void Content2MenuState::initialize() {
     // 제목 텍스트
     title_text = new Texture();
-    title_text->loadFromText("Content 1 Menu", Game::getInstance()->mRenderer->bigFont, config::default_text_color);
+    title_text->loadFromText("Content 2 Menu", Game::getInstance()->mRenderer->bigFont, config::default_text_color);
 
     // 기존 버튼 제거
     for (auto button : mButtons)
@@ -30,7 +30,7 @@ void Content2MenuState::initialize() {
 
     addButton(new Button(
         "Options",
-        []() { Game::getInstance()->pushNewState<ContentOptionsState>(); },
+        []() { Game::getInstance()->pushNewState<Content2OptionsState>(); },
         centerX, 190, buttonWidth, buttonHeight
     ));
 
