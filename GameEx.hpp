@@ -35,6 +35,7 @@ public:
     template <typename T>
     void pushNewState() {
         State* state = StateFactory::create<T>(mManager);
+        state->initialize(); 
         pushState(state);
     }
 
