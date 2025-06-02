@@ -1,36 +1,26 @@
-#include "abstractoptionstate.hpp"
+#include "optionstate.hpp"
 #include "selectioninputhandler.hpp"
 #include "game.hpp"
 
-AbstractOptionState::AbstractOptionState(InputManager* inputManager)
+OptionState::OptionState(InputManager* inputManager)
     : State(inputManager), index(0) {}
 
-AbstractOptionState::~AbstractOptionState() {
-    exit();
+OptionState::~OptionState() {
+    // 하위 클래스에서 exit()로 리소스 정리 강제
 }
 
-void AbstractOptionState::exit() {
-    for (auto btn : mButtons) delete btn;
-    mButtons.clear();
-}
-
-void AbstractOptionState::run() {
+void OptionState::run() {
     update();
     draw();
 }
 
-void AbstractOptionState::update() {
-    SelectionInputHandler::handle(mInputManager, mButtons, index, nextStateID);
-}
-
-void AbstractOptionState::draw() {
+void OptionState::draw() {
     Game::getInstance()->mRenderer->clearScreen();
 
     for (auto btn : mButtons) btn->draw();
     SelectionInputHandler::renderHighlight(mButtons, index);
 
-    drawOptions(); // 개별 설정 그리기
+    drawOptions();  // 서브클래스에서 그리기 구체화
 
     Game::getInstance()->mRenderer->updateScreen();
 }
-
