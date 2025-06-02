@@ -9,6 +9,12 @@ void MainMenuState::initialize() {
     title_text = new Texture();
     title_text->loadFromText("PixelTetris!", Game::getInstance()->mRenderer->bigFont, config::default_text_color);
 
+    // 기존 버튼들 정리
+    for (auto button : mButtons) {
+        delete button;
+    }
+    mButtons.clear();
+    
     int buttonWidth = 200;
     int buttonHeight = 50;
     int centerX = (config::logical_window_width - buttonWidth) / 2;
