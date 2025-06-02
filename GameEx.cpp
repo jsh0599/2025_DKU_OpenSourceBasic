@@ -40,7 +40,7 @@ bool Game::initialize() {
 
     if (TTF_Init() == -1) return false;
 
-    pushNewState<MenuState>();
+    pushNewState<MainMenuState>();
     return true;
 }
 
