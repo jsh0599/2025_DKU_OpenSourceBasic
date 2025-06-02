@@ -4,7 +4,7 @@
 #include "selectioninputhandler.hpp"
 
 MainMenuOptionState::MainMenuOptionState(InputManager* inputManager)
-    : AbstractOptionState(inputManager) {}
+    : OptionState(inputManager) {}
 
 MainMenuOptionState::~MainMenuOptionState() {
     exit();
@@ -13,7 +13,6 @@ MainMenuOptionState::~MainMenuOptionState() {
 void MainMenuOptionState::initialize() {
     index = 0;
 
-    // 현재 해상도 인덱스 확인
     for (int i = 0; i < config::possible_resolution_scalings; i++) {
         if (config::resolution_scaling == config::available_resolution_scalings[i]) {
             resolution_scaling_index = i;
@@ -64,7 +63,7 @@ void MainMenuOptionState::initialize() {
 }
 
 void MainMenuOptionState::update() {
-    AbstractOptionState::update();
+    SelectionInputHandler::handle(mInputManager, mButtons, index, nextStateID);
 
     while (mInputManager->pollAction()) {
         switch (mInputManager->getAction()) {
@@ -80,6 +79,23 @@ void MainMenuOptionState::update() {
             break;
         }
     }
+}
+
+void MainMenuOptionState::exit() {
+    delete title_text;
+    delete resolution_text;
+    delete resolution_setting_text;
+    delete ghost_block_setting_text;
+    delete texture_on_on;
+    delete texture_on_off;
+    delete texture_off_on;
+    delete texture_off_off;
+    delete left_arrow;
+    delete right_arrow;
+    delete OKButton;
+
+    for (auto btn : mButtons) delete btn;
+    mButtons.clear();
 }
 
 void MainMenuOptionState::drawOptions() {
@@ -127,3 +143,4 @@ void MainMenuOptionState::changeGhostBlock(SettingChange s) {
         config::ghost_piece_enabled = !config::ghost_piece_enabled;
     }
 }
+
