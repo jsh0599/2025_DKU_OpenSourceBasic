@@ -17,10 +17,41 @@ void ContentSelectState::initialize() {
 
     int centerX = (config::logical_window_width - 200) / 2;
 
-    addButton(new Button("Content 1", &ContentSelectState::startContent1, centerX, 150, 200, 40));
-    addButton(new Button("Content 2", &ContentSelectState::startContent2, centerX, 200, 200, 40));
-    addButton(new Button("Content 3", &ContentSelectState::startContent3, centerX, 250, 200, 40));
-    addButton(new Button("Back", &ContentSelectState::goBack, centerX, 300, 200, 40));
+    addButton(new Button(
+    "Content 1",
+    []() {
+        std::cout << "Content 1 Started!" << std::endl;
+        Game::getInstance()->pushNewState<Contet1MenuState>();
+    },
+    centerX, 150, 200, 40
+    ));
+
+    addButton(new Button(
+    "Content 2",
+    []() {
+        std::cout << "Content 2 Started!" << std::endl;
+        Game::getInstance()->pushNewState<Contet2MenuState>();
+    },
+    centerX, 200, 200, 40
+    ));
+
+    addButton(new Button(
+    "Content 3",
+    []() {
+        std::cout << "Content 3 Started!" << std::endl;
+        Game::getInstance()->pushNewState<Contet3MenuState>();
+    },
+    centerX, 250, 200, 40
+    ));
+
+    addButton(new Button(
+    "Back",
+    []() {
+        Game::getInstance()->popState();
+    },
+    centerX, 300, 200, 40
+    ));
+
 }
 
 void ContentSelectState::draw() {
@@ -40,22 +71,4 @@ void ContentSelectState::draw() {
     Game::getInstance()->mRenderer->updateScreen();
 }
 
-// 콜백 함수들
-void ContentSelectState::startContent1() {
-    std::cout << "Content 1 Started!" << std::endl;
-    Game::getInstance()->pushNewGame();
-}
 
-void ContentSelectState::startContent2() {
-    std::cout << "Content 2 Started!" << std::endl;
-    Game::getInstance()->pushMulti();
-}
-
-void ContentSelectState::startContent3() {
-    std::cout << "Content 3 Started!" << std::endl;
-    Game::pushChallengeMenu();
-}
-
-void ContentSelectState::goBack() {
-    Game::getInstance()->popState();
-}
