@@ -1,24 +1,19 @@
-#ifndef CONTENTSELECTSTATE_HPP
-#define CONTENTSELECTSTATE_HPP
+#ifndef CONTENTSELECTMENUSTATE_HPP
+#define CONTENTSELECTMENUSTATE_HPP
 
 #include "menustate.hpp"
 #include "button.hpp"
 #include "texture.hpp"
 
-class ContentSelectState : public MenuState {
+class ContentSelectMenuState : public MenuState {
 public:
-    ContentSelectState(InputManager* manager);
+    ContentSelectMenuState(InputManager* manager);
 
     void initialize() override;
     void draw() override;
 
 private:
     Texture* descriptionTexture;
-
-    static void startContent1();
-    static void startContent2();
-    static void startContent3();
-    static void goBack();
 };
 
-#endif // CONTENTSELECTSTATE_HPP
+#endif // CONTENTSELECTMENUSTATE_HPP
