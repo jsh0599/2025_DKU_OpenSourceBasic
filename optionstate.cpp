@@ -25,6 +25,6 @@ void OptionState::draw() {
     Game::getInstance()->mRenderer->updateScreen();
 }
 
-void MenuState::addButton(Button* button) {
+void OptionState::addButton(Button* button) {
     mButtons.push_back(button);
 }
