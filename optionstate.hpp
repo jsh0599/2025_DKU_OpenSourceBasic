@@ -15,8 +15,10 @@ public:
     virtual void update() override = 0;
     virtual void exit() override = 0;
 
-    void run() override;
+    void run() override;   
     void draw() override;  // 공통 draw는 구현, drawOptions만 하위에서 담당
+
+    void addButton (Button *button);
 
 protected:
     int index;
