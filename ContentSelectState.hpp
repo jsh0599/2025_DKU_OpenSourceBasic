@@ -15,9 +15,9 @@ public:
 private:
     Texture* descriptionTexture;
 
-    static void startMode1();
-    static void startMode2();
-    static void startMode3();
+    static void startContent1();
+    static void startContent2();
+    static void startContent3();
     static void goBack();
 };
 
