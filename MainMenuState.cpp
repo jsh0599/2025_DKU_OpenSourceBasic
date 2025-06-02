@@ -21,7 +21,7 @@ void MainMenuState::initialize() {
 
     addButton(new Button(
     "PLAY",
-    []() { Game::getInstance()->pushNewState<ModeSelectState>(); },
+    []() { Game::getInstance()->pushNewState<ContentSelectMenuState>(); },
     centerX, 130, buttonWidth, buttonHeight
     ));
 
