@@ -7,6 +7,7 @@ class ContentMenu : public MenuState {
 public:
 
     ContentMenu(InputManager* manager)
+
     void initialize() override;
     void draw() override;
 
