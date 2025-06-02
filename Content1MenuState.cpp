@@ -32,7 +32,7 @@ void Content1MenuState::initialize() {
         "Options",
         []() { 
             std::cout << "ContentOption" << std::endl;
-            /*Game::getInstance()->pushNewState<ContentOptionsState>();*/
+            /*Game::getInstance()->pushNewState<Content1OptionsState>();*/
         },
         centerX, 190, buttonWidth, buttonHeight
     ));
