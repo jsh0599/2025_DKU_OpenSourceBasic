@@ -1,10 +1,10 @@
 #ifndef MAINMENUOPTIONSTATE_HPP
 #define MAINMENUOPTIONSTATE_HPP
 
-#include "abstractoptionstate.hpp"
+#include "optionstate.hpp"
 #include "texture.hpp"
 
-class MainMenuOptionState : public AbstractOptionState {
+class MainMenuOptionState : public OptionState {
     enum class SettingChange { left, right };
 
 public:
@@ -12,8 +12,11 @@ public:
     ~MainMenuOptionState();
 
     void initialize() override;
-    void drawOptions() override;
     void update() override;
+    void exit() override;
+
+protected:
+    void drawOptions() override;
 
 private:
     Button* OKButton;
