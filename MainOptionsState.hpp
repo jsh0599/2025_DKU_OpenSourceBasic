@@ -1,21 +1,40 @@
-#ifndef MAINOPTIONSSTATE_HPP
-#define MAINOPTIONSSTATE_HPP
+#ifndef MAINMENUOPTIONSTATE_HPP
+#define MAINMENUOPTIONSTATE_HPP
 
-#include "optionsstate.hpp"
+#include "abstractoptionstate.hpp"
+#include "texture.hpp"
 
-class MainOptionsState : public OptionsState {
+class MainMenuOptionState : public AbstractOptionState {
+    enum class SettingChange { left, right };
+
 public:
-    MainOptionsState(InputManager* manager);
+    MainMenuOptionState(InputManager* inputManager);
+    ~MainMenuOptionState();
+
     void initialize() override;
-    void draw() override;
-    void changeSetting(int selectedIndex, int direction) override;
+    void drawOptions() override;
+    void update() override;
 
 private:
-    Texture* resolutionText;
-    Texture* ghostBlockText;
-    Texture* descriptionText;
+    Button* OKButton;
+    Texture* title_text;
 
-    int resolutionIndex;
+    Texture* resolution_setting_text;
+    Texture* resolution_text;
+    Texture* ghost_block_setting_text;
+
+    Texture* left_arrow;
+    Texture* right_arrow;
+
+    Texture* texture_on_on;
+    Texture* texture_on_off;
+    Texture* texture_off_on;
+    Texture* texture_off_off;
+
+    int resolution_scaling_index;
+
+    void changeResolution(SettingChange s);
+    void changeGhostBlock(SettingChange s);
 };
 
-#endif // MAINOPTIONSSTATE_HPP
+#endif // MAINMENUOPTIONSTATE_HPP
