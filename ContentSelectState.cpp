@@ -16,9 +16,10 @@ void ContentSelectState::initialize() {
     descriptionTexture->loadFromText("Select Content", Game::getInstance()->mRenderer->mediumFont, config::default_text_color);
 
     int centerX = (config::logical_window_width - 200) / 2;
-    addButton(new Button("Single Mode", &ContentSelectState::startMode1, centerX, 150, 200, 40));
-    addButton(new Button("Multi Mode", &ContentSelectState::startMode2, centerX, 200, 200, 40));
-    addButton(new Button("Challenge Mode", &ContentSelectState::startMode3, centerX, 250, 200, 40));
+
+    addButton(new Button("Content 1", &ContentSelectState::startContent1, centerX, 150, 200, 40));
+    addButton(new Button("Content 2", &ContentSelectState::startContent2, centerX, 200, 200, 40));
+    addButton(new Button("Content 3", &ContentSelectState::startContent3, centerX, 250, 200, 40));
     addButton(new Button("Back", &ContentSelectState::goBack, centerX, 300, 200, 40));
 }
 
@@ -40,18 +41,18 @@ void ContentSelectState::draw() {
 }
 
 // 콜백 함수들
-void ContentSelectState::startMode1() {
-    std::cout << "Single Mode Started!" << std::endl;
+void ContentSelectState::startContent1() {
+    std::cout << "Content 1 Started!" << std::endl;
     Game::getInstance()->pushNewGame();
 }
 
-void ContentSelectState::startMode2() {
-    std::cout << "Multi Mode Started!" << std::endl;
+void ContentSelectState::startContent2() {
+    std::cout << "Content 2 Started!" << std::endl;
     Game::getInstance()->pushMulti();
 }
 
-void ContentSelectState::startMode3() {
-    std::cout << "Challenge Mode Started!" << std::endl;
+void ContentSelectState::startContent3() {
+    std::cout << "Content 3 Started!" << std::endl;
     Game::pushChallengeMenu();
 }
 
