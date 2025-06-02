@@ -24,13 +24,13 @@ void Content1MenuState::initialize() {
     // 버튼 추가
     addButton(new Button(
         "Start Content",
-        []() { Game::getInstance()->pushNewState<GameState>(); },
+        []() { Game::getInstance()->pushNewState<ModeSelectState>(); },
         centerX, 130, buttonWidth, buttonHeight
     ));
 
     addButton(new Button(
         "Options",
-        []() { Game::getInstance()->pushNewState<OptionsState>(); },
+        []() { Game::getInstance()->pushNewState<ContentOptionsState>(); },
         centerX, 190, buttonWidth, buttonHeight
     ));
 
