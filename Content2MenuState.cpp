@@ -30,7 +30,10 @@ void Content2MenuState::initialize() {
 
     addButton(new Button(
         "Options",
-        []() { Game::getInstance()->pushNewState<Content2OptionsState>(); },
+        []() { 
+            std::cout << "ContentOption" << std::endl;
+            /*Game::getInstance()->pushNewState<Content2OptionsState>();*/ 
+        },
         centerX, 190, buttonWidth, buttonHeight
     ));
 
