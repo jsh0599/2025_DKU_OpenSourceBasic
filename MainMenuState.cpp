@@ -19,9 +19,25 @@ void MainMenuState::initialize() {
     int buttonHeight = 50;
     int centerX = (config::logical_window_width - buttonWidth) / 2;
 
-    addButton(new Button("PLAY", &Game::pushModeSelect, centerX, 130, buttonWidth, buttonHeight));
-    addButton(new Button("OPTIONS", &Game::pushOptions, centerX, 190, buttonWidth, buttonHeight));
-    addButton(new Button("EXIT", &Game::goBack, centerX, 250, buttonWidth, buttonHeight));
+    addButton(new Button(
+    "PLAY",
+    []() { Game::getInstance()->pushNewState<ModeSelectState>(); },
+    centerX, 130, buttonWidth, buttonHeight
+    ));
+
+    addButton(new Button(
+    "OPTIONS",
+    []() { Game::getInstance()->pushNewState<OptionsState>(); },
+    centerX, 190, buttonWidth, buttonHeight
+    ));
+
+    addButton(new Button(
+    "EXIT",
+    []() { Game::getInstance()->goBack(); },
+    centerX, 250, buttonWidth, buttonHeight
+    ));
+
+      
 }
 
 void MainMenuState::draw() {
