@@ -30,9 +30,9 @@ void MainMenuOptionState::initialize() {
 #endif
 
     mButtons.clear();
-    mButtons.push_back(new Button("Resolution", nullptr, 50, 100, 200, 40));
-    mButtons.push_back(new Button("Ghost Block", nullptr, 50, 180, 200, 40));
-    mButtons.push_back(OKButton);
+    addButton(new Button("Resolution", nullptr, 50, 100, 200, 40));
+    addButton(new Button("Ghost Block", nullptr, 50, 180, 200, 40));
+    addButton(OKButton);
 
     resolution_setting_text = new Texture();
     resolution_text = new Texture();
