@@ -1,28 +1,28 @@
-#ifndef ABSTRACTOPTIONSTATE_HPP
-#define ABSTRACTOPTIONSTATE_HPP
+#ifndef OPTIONSTATE_HPP
+#define OPTIONSTATE_HPP
 
 #include <vector>
 #include "button.hpp"
 #include "inputmanager.hpp"
 #include "state.hpp"
 
-class AbstractOptionState : public State {
+class OptionState : public State {
 public:
-    AbstractOptionState(InputManager* inputManager);
-    virtual ~AbstractOptionState();
+    OptionState(InputManager* inputManager);
+    virtual ~OptionState();
 
-    void initialize() override = 0; // 반드시 서브클래스에서 구현
-    void exit() override;
+    virtual void initialize() override = 0;
+    virtual void update() override = 0;
+    virtual void exit() override = 0;
 
     void run() override;
-    void update() override;
-    void draw() override;
+    void draw() override;  // 공통 draw는 구현, drawOptions만 하위에서 담당
 
 protected:
     int index;
     std::vector<Button*> mButtons;
 
-    virtual void drawOptions() = 0; // 각 옵션 항목은 서브클래스에서 정의
+    virtual void drawOptions() = 0; // 옵션 항목 렌더링은 하위 클래스에 위임
 };
 
-#endif // ABSTRACTOPTIONSTATE_HPP
+#endif // OPTIONSTATE_HPP
